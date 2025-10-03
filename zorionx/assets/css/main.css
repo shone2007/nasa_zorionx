@@ -1295,13 +1295,13 @@ section,
 }
 
 .services .services-cta .btn {
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), #8b5cf6 30%));
+  background: linear-gradient(135deg, var(--surface-color), color-mix(in srgb, var(--surface-color), #8b5cf6 30%));
   border: none;
   border-radius: 50px;
   padding: 14px 32px;
   font-weight: 600;
   font-size: 16px;
-  color: var(--contrast-color);
+  color: var(--accent-color);
   text-decoration: none;
   display: inline-block;
   transition: all 0.3s ease;
