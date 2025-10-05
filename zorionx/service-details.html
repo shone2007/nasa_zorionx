@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Service Details - Clarity Bootstrap Template</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <title>Data Search Services - NASA Space Biology</title>
+  <meta name="description" content="Access comprehensive space biology data through our advanced search services">
+  <meta name="keywords" content="NASA, space biology, data repository, research, publications">
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
@@ -27,13 +27,63 @@
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: Clarity
-  * Template URL: https://bootstrapmade.com/clarity-bootstrap-agency-template/
-  * Updated: Sep 13 2025 with Bootstrap v5.3.8
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <style>
+    .service-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 30px;
+      color: white;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .service-card h3 {
+      color: white;
+      margin-bottom: 15px;
+    }
+    
+    .service-card .btn-link {
+      background: white;
+      color: #667eea;
+      padding: 10px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 15px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .service-card .btn-link:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+    
+    .stats-box {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    .stats-box h2 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      color: white;
+    }
+    
+    .stats-box p {
+      margin: 0;
+      font-size: 1.1em;
+    }
+  </style>
 </head>
 
 <body class="service-details-page">
@@ -42,41 +92,30 @@
     <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
-        <h1 class="sitename">Clarity</h1>
+        <h1 class="sitename">NASA Space Biology</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#team">Team</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#portfolio">Portfolio</a></li>
+          <li><a href="index.html#team">Team</a></li>
+          <li class="dropdown"><a href="#"><span>Resources</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
+              <li><a href="publications.html">Publications</a></li>
+              <li><a href="osdr.html">OSDR</a></li>
+              <li><a href="nslsl.html">NSLSL</a></li>
+              <li><a href="registry.html">Research Registry</a></li>
             </ul>
           </li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="#about">Get Started</a>
+      <a class="btn-getstarted" href="#service-details">Explore Data</a>
 
     </div>
   </header>
@@ -88,16 +127,16 @@
       <div class="breadcrumbs">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="bi bi-house"></i> Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Category</a></li>
-            <li class="breadcrumb-item active current">Service Details</li>
+            <li class="breadcrumb-item"><a href="index.html"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="#services">Services</a></li>
+            <li class="breadcrumb-item active current">Data Search Services</li>
           </ol>
         </nav>
       </div>
 
       <div class="title-wrapper">
-        <h1>Service Details</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+        <h1>Comprehensive Data Search Services</h1>
+        <p>Access cutting-edge space biology research data, publications, and resources through our integrated search platform</p>
       </div>
     </div><!-- End Page Title -->
 
@@ -111,88 +150,137 @@
           <!-- Service Overview -->
           <div class="col-lg-8">
             <div class="service-content">
-              <h2>Digital Marketing Strategy</h2>
-              <p class="lead">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.</p>
+              <h2>Advanced Space Biology Data Search Platform</h2>
+              <p class="lead">Our comprehensive data search services provide researchers, scientists, and space exploration enthusiasts with seamless access to decades of space biology research, experimental data, and scientific publications.</p>
 
               <div class="service-image" data-aos="fade-up" data-aos-delay="200">
-                <img src="assets/img/services/services-3.webp" alt="Digital Marketing" class="img-fluid rounded">
+                <img src="assets/img/services/services-3.webp" alt="Data Search Services" class="img-fluid rounded">
               </div>
 
-              <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+              <p>The NASA Space Biology data ecosystem integrates multiple repositories and libraries, offering a unified search experience across hundreds of publications, datasets, and research materials. Our platform enables advanced filtering, cross-referencing, and data visualization to support your research needs.</p>
 
               <!-- Service Features -->
               <div class="service-features" data-aos="fade-up" data-aos-delay="300">
-                <h4>What's Included</h4>
+                <h4>Platform Features</h4>
                 <div class="row gy-3">
                   <div class="col-md-6">
                     <div class="feature-item">
-                      <i class="bi bi-graph-up-arrow flex-shrink-0"></i>
+                      <i class="bi bi-search flex-shrink-0"></i>
                       <div>
-                        <h5>Performance Analytics</h5>
-                        <p>Comprehensive tracking and reporting of all marketing metrics and KPIs.</p>
+                        <h5>Advanced Search Capabilities</h5>
+                        <p>Powerful search algorithms with filters for keywords, dates, experiments, and organisms.</p>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="feature-item">
-                      <i class="bi bi-bullseye flex-shrink-0"></i>
+                      <i class="bi bi-database flex-shrink-0"></i>
                       <div>
-                        <h5>Target Audience Research</h5>
-                        <p>In-depth analysis to identify and reach your ideal customer base.</p>
+                        <h5>Integrated Data Repositories</h5>
+                        <p>Access multiple data sources through a single unified interface.</p>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="feature-item">
-                      <i class="bi bi-palette flex-shrink-0"></i>
+                      <i class="bi bi-file-earmark-text flex-shrink-0"></i>
                       <div>
-                        <h5>Content Creation</h5>
-                        <p>Engaging visual and written content tailored to your brand voice.</p>
+                        <h5>608+ Publications</h5>
+                        <p>Comprehensive collection of peer-reviewed research papers and scientific articles.</p>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="feature-item">
-                      <i class="bi bi-share flex-shrink-0"></i>
+                      <i class="bi bi-cloud-download flex-shrink-0"></i>
                       <div>
-                        <h5>Social Media Management</h5>
-                        <p>Complete management of your social media presence across platforms.</p>
+                        <h5>Open Access Downloads</h5>
+                        <p>Download datasets, publications, and supplementary materials in multiple formats.</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Process Steps -->
+              <!-- Data Sources -->
               <div class="service-process" data-aos="fade-up" data-aos-delay="400">
-                <h4>Our Process</h4>
+                <h4>Our Data Sources</h4>
+                
+                <div class="service-card">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-file-earmark-richtext" style="font-size: 3em; margin-right: 20px;"></i>
+                    <div>
+                      <h3>608 Publications</h3>
+                      <p>Extensive collection of space biology research papers, articles, and scientific documentation spanning decades of missions and experiments.</p>
+                      <a href="publications.html" class="btn-link">Browse Publications →</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="service-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-server" style="font-size: 3em; margin-right: 20px;"></i>
+                    <div>
+                      <h3>Open Science Data Repository (OSDR)</h3>
+                      <p>NASA's premier open-access repository for spaceflight and space-relevant datasets, providing raw and processed data from biological experiments.</p>
+                      <a href="osdr.html" class="btn-link">Explore OSDR →</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="service-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-book" style="font-size: 3em; margin-right: 20px;"></i>
+                    <div>
+                      <h3>NASA Space Life Sciences Library (NSLSL)</h3>
+                      <p>Comprehensive library containing historical documents, mission reports, technical papers, and educational resources related to space life sciences.</p>
+                      <a href="nslsl.html" class="btn-link">Visit Library →</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="service-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-journals" style="font-size: 3em; margin-right: 20px;"></i>
+                    <div>
+                      <h3>Research Registry</h3>
+                      <p>Centralized registry tracking ongoing and completed space biology research projects, enabling collaboration and preventing duplication of efforts.</p>
+                      <a href="registry.html" class="btn-link">View Registry →</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- How to Use -->
+              <div class="service-process" data-aos="fade-up" data-aos-delay="500">
+                <h4>How to Use Our Search Platform</h4>
                 <div class="process-steps">
                   <div class="step-item">
                     <div class="step-number">01</div>
                     <div class="step-content">
-                      <h5>Strategy Development</h5>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tempus vestibulum mauris quis aliquam.</p>
+                      <h5>Select Your Data Source</h5>
+                      <p>Choose from Publications, OSDR, NSLSL, or Research Registry based on your research needs.</p>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-number">02</div>
                     <div class="step-content">
-                      <h5>Implementation</h5>
-                      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                      <h5>Enter Search Criteria</h5>
+                      <p>Use keywords, filters, and advanced search options to narrow down relevant results.</p>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-number">03</div>
                     <div class="step-content">
-                      <h5>Optimization</h5>
-                      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.</p>
+                      <h5>Review & Analyze Results</h5>
+                      <p>Browse through search results with preview options, metadata, and relevance rankings.</p>
                     </div>
                   </div>
                   <div class="step-item">
                     <div class="step-number">04</div>
                     <div class="step-content">
-                      <h5>Results &amp; Reporting</h5>
-                      <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.</p>
+                      <h5>Access & Download</h5>
+                      <p>Download publications, datasets, or save searches for future reference with full citation support.</p>
                     </div>
                   </div>
                 </div>
@@ -205,21 +293,37 @@
           <div class="col-lg-4">
             <div class="sidebar" data-aos="fade-up" data-aos-delay="200">
 
+              <!-- Statistics -->
+              <div class="stats-box">
+                <h2>608+</h2>
+                <p>Research Publications</p>
+              </div>
+
+              <div class="stats-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <h2>1000+</h2>
+                <p>Datasets Available</p>
+              </div>
+
+              <div class="stats-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <h2>50+</h2>
+                <p>Years of Research</p>
+              </div>
+
               <!-- Service Quick Facts -->
               <div class="service-info">
-                <h4>Service Details</h4>
+                <h4>Platform Details</h4>
                 <ul class="service-facts">
                   <li>
-                    <span class="fact-label">Duration:</span>
-                    <span class="fact-value">3-6 Months</span>
+                    <span class="fact-label">Access:</span>
+                    <span class="fact-value">Open & Free</span>
                   </li>
                   <li>
-                    <span class="fact-label">Delivery:</span>
-                    <span class="fact-value">Weekly Reports</span>
+                    <span class="fact-label">Updates:</span>
+                    <span class="fact-value">Real-time</span>
                   </li>
                   <li>
-                    <span class="fact-label">Team Size:</span>
-                    <span class="fact-value">4-6 Specialists</span>
+                    <span class="fact-label">Formats:</span>
+                    <span class="fact-value">PDF, CSV, JSON, XML</span>
                   </li>
                   <li>
                     <span class="fact-label">Support:</span>
@@ -231,12 +335,12 @@
               <!-- Testimonial -->
               <div class="service-testimonial">
                 <div class="testimonial-content">
-                  <p>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum sed ut perspiciatis."</p>
+                  <p>"The NASA Space Biology data platform has revolutionized our research capabilities. Access to comprehensive datasets and publications has accelerated our discoveries significantly."</p>
                   <div class="testimonial-author">
-                    <img src="assets/img/person/person-f-3.webp" alt="Sarah Johnson" class="author-image">
+                    <img src="assets/img/person/person-f-3.webp" alt="Dr. Sarah Martinez" class="author-image">
                     <div class="author-info">
-                      <h5>Sarah Johnson</h5>
-                      <span>Marketing Director</span>
+                      <h5>Dr. Sarah Martinez</h5>
+                      <span>Space Biology Researcher</span>
                     </div>
                   </div>
                 </div>
@@ -244,8 +348,8 @@
 
               <!-- Contact Form -->
               <div class="inquiry-form">
-                <h4>Get a Quote</h4>
-                <form action="forms/get-a-quote.php" method="post" class="php-email-form">
+                <h4>Request Data Access</h4>
+                <form action="forms/data-request.php" method="post" class="php-email-form">
                   <div class="form-group mb-3">
                     <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
                   </div>
@@ -253,16 +357,16 @@
                     <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required="">
                   </div>
                   <div class="form-group mb-3">
-                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Your Phone">
+                    <input type="text" name="institution" class="form-control" id="institution" placeholder="Institution/Organization">
                   </div>
-                  <input type="hidden" name="subect" value="Service Quote Request">
+                  <input type="hidden" name="subject" value="Data Access Request">
                   <div class="form-group mb-4">
-                    <textarea class="form-control" name="message" rows="5" placeholder="Tell us about your project requirements..." required=""></textarea>
+                    <textarea class="form-control" name="message" rows="5" placeholder="Describe your research interests and data needs..." required=""></textarea>
                   </div>
                   <div class="loading">Loading</div>
                   <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-                  <button type="submit" class="btn-submit w-100">Request Quote</button>
+                  <div class="sent-message">Your request has been submitted. Thank you!</div>
+                  <button type="submit" class="btn-submit w-100">Submit Request</button>
                 </form>
               </div>
 
@@ -283,13 +387,13 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Clarity</span>
+            <span class="sitename">NASA Space Biology</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p>NASA Ames Research Center</p>
+            <p>Moffett Field, CA 94035</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+1 (650) 604-5000</span></p>
+            <p><strong>Email:</strong> <span>arc-dl-space-biology@mail.nasa.gov</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -300,46 +404,46 @@
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
+          <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="#">Privacy Policy</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
+          <h4>Data Resources</h4>
           <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
+            <li><a href="publications.html">Publications</a></li>
+            <li><a href="osdr.html">OSDR</a></li>
+            <li><a href="nslsl.html">NSLSL</a></li>
+            <li><a href="registry.html">Research Registry</a></li>
+            <li><a href="#">Data Guidelines</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Hic solutasetp</h4>
+          <h4>Research Areas</h4>
           <ul>
-            <li><a href="#">Molestiae accusamus iure</a></li>
-            <li><a href="#">Excepturi dignissimos</a></li>
-            <li><a href="#">Suscipit distinctio</a></li>
-            <li><a href="#">Dilecta</a></li>
-            <li><a href="#">Sit quas consectetur</a></li>
+            <li><a href="#">Plant Biology</a></li>
+            <li><a href="#">Microbiology</a></li>
+            <li><a href="#">Cell Biology</a></li>
+            <li><a href="#">Human Physiology</a></li>
+            <li><a href="#">Radiation Biology</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Nobis illum</h4>
+          <h4>Support</h4>
           <ul>
-            <li><a href="#">Ipsam</a></li>
-            <li><a href="#">Laudantium dolorum</a></li>
-            <li><a href="#">Dinera</a></li>
-            <li><a href="#">Trodelas</a></li>
-            <li><a href="#">Flexo</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Tutorials</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">API Access</a></li>
+            <li><a href="#">Help Center</a></li>
           </ul>
         </div>
 
@@ -347,13 +451,9 @@
     </div>
 
     <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Clarity</strong> <span>All Rights Reserved</span></p>
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">NASA Space Biology</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        A Division of NASA Life Sciences | <a href="https://www.nasa.gov">NASA.gov</a>
       </div>
     </div>
 

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Research Registry - Space Biology & Human Research</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
+    <style>
+        :root {
+            --nasa-blue: #0b3d91;
+            --nasa-cyan: #00c7e2;
+            --accent-yellow: #fbbc05;
+            --accent-orange: #ff9900;
+            --background-dark: #0b0d18;
+            --card-bg: #1c1f30;
+            --card-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-dark);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--card-bg);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--nasa-cyan);
+            box-shadow: 0 2px 10px rgba(0, 199, 226, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: var(--nasa-cyan);
+            margin: 0;
+        }
+
+        .nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--accent-orange);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0b3d91 0%, #1c1f30 100%);
+            padding: 60px 50px;
+            text-align: center;
+            border-bottom: 2px solid var(--nasa-cyan);
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: var(--accent-yellow);
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Metrics Section */
+        .metrics {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 50px;
+            gap: 20px;
+            background-color: rgba(28, 31, 48, 0.5);
+            border-bottom: 1px solid rgba(0, 199, 226, 0.2);
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            border-left: 5px solid var(--nasa-cyan);
+            border-radius: 8px;
+            padding: 25px;
+            flex: 1;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 199, 226, 0.4);
+        }
+
+        .metric-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.1em;
+            color: var(--accent-orange);
+        }
+
+        .metric-card .value {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: var(--nasa-cyan);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Registry Cards Grid */
+        .registry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .registry-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .registry-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--nasa-cyan);
+            box-shadow: 0 8px 25px rgba(0, 199, 226, 0.4);
+        }
+
+        .registry-card h3 {
+            color: var(--accent-orange);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .registry-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .registry-card .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: var(--nasa-cyan);
+            color: var(--background-dark);
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .registry-card:hover .btn {
+            background-color: var(--accent-orange);
+            color: white;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2em;
+            color: var(--nasa-cyan);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-orange);
+        }
+
+        /* Explorer Section */
+        .explorer-section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 15px 25px;
+            background-color: rgba(0, 199, 226, 0.1);
+            border: 2px solid rgba(0, 199, 226, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 1em;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--nasa-cyan);
+            box-shadow: 0 0 15px rgba(0, 199, 226, 0.3);
+        }
+
+        .search-bar button {
+            padding: 15px 35px;
+            background-color: var(--accent-orange);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--accent-yellow);
+            transform: scale(1.05);
+        }
+
+        /* Filter Panel */
+        .filter-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--accent-yellow);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 199, 226, 0.1);
+            border: 1px solid rgba(0, 199, 226, 0.3);
+            border-radius: 5px;
+            color: white;
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            margin: 30px 0;
+        }
+
+        .charts-css.bar {
+            height: 300px;
+        }
+
+        .charts-css.bar tbody td {
+            background-color: var(--nasa-cyan);
+            transition: background-color 0.3s;
+        }
+
+        .charts-css.bar tbody tr:hover td {
+            background-color: var(--accent-orange);
+        }
+
+        .charts-css.bar caption {
+            color: var(--accent-yellow);
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .charts-css.bar tbody th {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-top: 30px;
+        }
+
+        .accordion-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 199, 226, 0.2);
+        }
+
+        .accordion-button {
+            width: 100%;
+            padding: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .accordion-button:hover {
+            background-color: rgba(0, 199, 226, 0.1);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 20px;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 1000px;
+            padding: 20px;
+        }
+
+        .accordion-item.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .chevron {
+            transition: transform 0.3s;
+            font-size: 1.5em;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 2px solid var(--nasa-cyan);
+        }
+
+        footer a {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            color: var(--accent-orange);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .metrics {
+                flex-direction: column;
+            }
+
+            .registry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>NASA Research Registry</h1>
+        <div class="nav">
+            <a href="index.html">Home</a>
+            <a href="#overview">Overview</a>
+            <a href="#databases">Databases</a>
+            <a href="#hrp">Human Research</a>
+            <a href="#facilities">Facilities</a>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h2>Comprehensive Space Biology & Human Research Registry</h2>
+        <p>Exploring the research that enables human deep space exploration through integrated databases, project tracking, and collaborative resources</p>
+    </div>
+
+    <div class="metrics" id="overview">
+        <div class="metric-card">
+            <h3>Total Funded Projects</h3>
+            <div class="value">1,500+</div>
+        </div>
+        <div class="metric-card">
+            <h3>Health Risks Identified</h3>
+            <div class="value">32</div>
+        </div>
+        <div class="metric-card">
+            <h3>Publications Indexed</h3>
+            <div class="value">9,000+</div>
+        </div>
+        <div class="metric-card">
+            <h3>Active Research Elements</h3>
+            <div class="value">4</div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <h2 class="section-title" id="databases">Research Databases & Resources</h2>
+        
+        <div class="registry-grid">
+            <a href="https://taskbook.nasaprs.com/tbp/index.cfm" target="_blank" class="registry-card">
+                <h3>📋 NASA Task Book</h3>
+                <p>Comprehensive database cataloguing all research projects supported by NASA's Biological & Physical Sciences Division and Human Research Program. Access project descriptions, progress reports, and publications.</p>
+                <span class="btn">Search Task Book →</span>
+            </a>
+
+            <div class="registry-card" onclick="toggleSection('hrp-dashboard')">
+                <h3>🚀 Human Research Program Dashboard</h3>
+                <p>Interactive dashboard tracking HRP program elements, health risks, and research focus areas. Includes metrics on Space Radiation, Human Health Countermeasures, and Behavioral Performance.</p>
+                <span class="btn">View Dashboard →</span>
+            </div>
+
+            <div class="registry-card" onclick="toggleSection('nsrl-info')">
+                <h3>⚛️ NASA Space Radiation Laboratory</h3>
+                <p>Premier facility for simulating deep-space radiation environment at Brookhaven National Laboratory. Essential for mitigating health risks for Artemis and Mars missions.</p>
+                <span class="btn">Learn More →</span>
+            </div>
+
+            <a href="publications.html" class="registry-card">
+                <h3>📄 Publications Database</h3>
+                <p>Access 608+ peer-reviewed research papers and scientific articles spanning decades of space biology missions and experiments.</p>
+                <span class="btn">Browse Publications →</span>
+            </a>
+
+            <a href="osdr.html" class="registry-card">
+                <h3>🗄️ Open Science Data Repository</h3>
+                <p>NASA's open-access repository for spaceflight and space-relevant datasets, providing raw and processed data from biological experiments.</p>
+                <span class="btn">Explore OSDR →</span>
+            </a>
+
+            <a href="nslsl.html" class="registry-card">
+                <h3>📚 Space Life Sciences Library</h3>
+                <p>Comprehensive library containing historical documents, mission reports, technical papers, and educational resources related to space life sciences.</p>
+                <span class="btn">Visit Library →</span>
+            </a>
+        </div>
+
+        <!-- HRP Dashboard Section -->
+        <div id="hrp-dashboard" class="explorer-section" style="display: none;">
+            <h2 class="section-title">Human Research Program Dashboard</h2>
+            
+            <div style="background-color: rgba(255, 193, 7, 0.2); padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+                <h3 style="color: var(--accent-yellow); margin-bottom: 10px;">Overall Risk Status: MEDIUM</h3>
+                <p>Critical Risks: Space Radiation & SANS (Spaceflight Associated Neuro-ocular Syndrome)</p>
+            </div>
+
+            <div class="chart-container">
+                <table class="charts-css bar show-labels data-spacing-5">
+                    <caption>HRP Program Elements by Relative Focus</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Element</th>
+                            <th scope="col">Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Space Radiation</th>
+                            <td style="--size: 1.0;"><span class="data">1.0</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Human Health Countermeasures</th>
+                            <td style="--size: 0.9;"><span class="data">0.9</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Exploration Medical Capability</th>
+                            <td style="--size: 0.8;"><span class="data">0.8</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Human Factors & Behavioral Performance</th>
+                            <td style="--size: 0.65;"><span class="data">0.65</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Research Operations & Integration</th>
+                            <td style="--size: 0.5;"><span class="data">0.5</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>HRP Program Elements (4)</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul style="line-height: 2; padding-left: 20px;">
+                            <li><strong>Space Radiation (SR):</strong> Characterizing and mitigating radiation effects on astronauts</li>
+                            <li><strong>Human Health Countermeasures (HHC):</strong> Developing safeguards for physiological changes in bone, muscle, and cardiovascular systems</li>
+                            <li><strong>Human Factors and Behavioral Performance (HFBP):</strong> Addressing crew training, selection, and psychological/team health</li>
+                            <li><strong>Research Operations and Integration (ROI):</strong> Integrating research on ISS/analogs and managing data</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>CHAPEA Mission Highlights</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>CHAPEA Mission 1:</strong> Successfully completed July 6, 2024, after 378 days in the 3D-printed Mars Dune Alpha habitat. Focus was on behavioral health, performance, and food system studies under extreme isolation and delayed communication.</p>
+                        <p style="margin-top: 15px;"><strong>CHAPEA Mission 2:</strong> Scheduled to begin Q4 2025, continuing the study of human performance in Mars-analog conditions.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>Human Research Roadmap Structure</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>The Human Research Roadmap (HRR) outlines:</p>
+                        <ul style="padding-left: 20px; margin-top: 10px; line-height: 1.8;">
+                            <li><strong>Evidence:</strong> Accumulated data from records, operations, and research</li>
+                            <li><strong>Risks:</strong> 32 identified health risks assigned to an HRP Element for mitigation</li>
+                            <li><strong>Gaps:</strong> Knowledge uncertainty about a risk or its mitigation</li>
+                            <li><strong>Tasks:</strong> Specific research activities designed to close one or more gaps</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NSRL Section -->
+        <div id="nsrl-info" class="explorer-section" style="display: none;">
+            <h2 class="section-title">NASA Space Radiation Laboratory (NSRL)</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item active">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>About the Laboratory</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p style="margin-bottom: 15px;">The <strong>NASA Space Radiation Laboratory (NSRL)</strong>, situated at <strong>Brookhaven National Laboratory (BNL)</strong> in Upton, New York, serves as the premier facility for simulating the deep-space radiation environment. It is a vital resource for mitigating the major health risks associated with long-duration human space missions beyond low-Earth orbit, including the Artemis program to the Moon and missions to Mars.</p>
+                        <p>It is the only facility in the United States capable of delivering the diverse ion beams necessary to accurately simulate the complex mix of cosmic rays and solar particles encountered outside Earth's protective magnetosphere.</p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>Key Focus and Scientific Mission</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p style="margin-bottom: 15px;">The primary mission of the NSRL is to provide beams of high-energy charged particles to characterize the biological and physical risks to astronauts. This requires simulating two major components of space radiation:</p>
+                        <ul style="padding-left: 20px; line-height: 1.8; margin-bottom: 15px;">
+                            <li><strong>Galactic Cosmic Rays (GCR):</strong> High-energy protons and heavy ions that originate from outside the solar system</li>
+                            <li><strong>Solar Particle Events (SPE):</strong> Large bursts of protons and heavier ions ejected from the Sun</li>
+                        </ul>
+                        <p style="color: var(--accent-orange); font-weight: bold; margin-bottom: 10px;">Research Capabilities:</p>
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Biological Studies:</strong> Analyzing the impact of radiation on living systems, including DNA, cells, and organs</li>
+                            <li><strong>Countermeasure Testing:</strong> Evaluating new radiation shielding materials for spacecraft and habitats</li>
+                            <li><strong>Pharmaceutical Research:</strong> Testing radioprotectants that might help astronauts recover from radiation effects</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-button" onclick="toggleAccordion(this)">
+                        <span>Human Spaceflight Risks Addressed</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p style="margin-bottom: 15px;">The work at NSRL directly supports NASA's Human Research Program by addressing critical risks:</p>
+                        <ul style="padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Radiation Exposure:</strong> Long-term issues like cancer and cardiovascular disease</li>
+                            <li><strong>Central Nervous System Impairment:</strong> Impacts on cognition, motor control, and behavior</li>
+                            <li><strong>Altered Gravity and Hostile Environments:</strong> Overall risk profile for crew performance</li>
+                            <li><strong>Medical and Behavioral Health:</strong> Effective countermeasures for physical and psychological effects</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Explorer Section -->
+        <h2 class="section-title" style="margin-top: 60px;">Research Project Explorer</h2>
+        
+        <div class="explorer-section">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by keyword, PI name, or mission...">
+                <button onclick="performSearch()">Search</button>
+            </div>
+
+            <div class="filter-panel">
+                <div class="filter-group">
+                    <label>Research Domain</label>
+                    <select id="domain-filter">
+                        <option>All Domains</option>
+                        <option>Space Biology</option>
+                        <option>Physical Sciences</option>
+                        <option>Human Research</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Mission Focus</label>
+                    <select id="mission-filter">
+                        <option>All Missions</option>
+                        <option>ISS</option>
+                        <option>Artemis/Lunar</option>
+                        <option>Mars</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Fiscal Year</label>
+                    <input type="number" id="year-filter" placeholder="e.g., 2024">
+                </div>
+
+                <div class="filter-group">
+                    <label>HRP Element</label>
+                    <select id="hrp-filter">
+                        <option>All Elements</option>
+                        <option>Space Radiation</option>
+                        <option>Human Health Countermeasures</option>
+                        <option>Behavioral Performance</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="window.open('https://taskbook.nasaprs.com/tbp/index.cfm', '_blank')" style="padding: 15px 40px; background-color: var(--accent-orange); border: none; border-radius: 50px; color: white; font-weight: bold; font-size: 1.1em; cursor: pointer;">
+                    Access Full NASA Task Book Database →
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p style="margin-bottom: 15px;">NASA Research Registry | Biological & Physical Sciences and Human Research Program</p>
+        <div>
+            <a href="https://taskbook.nasaprs.com/tbp/welcome.cfm" target="_blank">Official Task Book</a>
+            <a href="osdr.html">OSDR</a>
+            <a href="nslsl.html">NSLSL</a>
+            <a href="index.html">Home</a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">Data sourced from NASA Task Book and Human Research Program documentation</p>
+    </footer>
+
+    <script>
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section.style.display === 'none' || section.style.display === '') {
+                // Hide all sections first
+                document.querySelectorAll('.explorer-section').forEach(s => {
+                    s.style.display = 'none';
+                });
+                section.style.display = 'block';
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        function toggleAccordion(button) {
+            const item = button.closest('.accordion-item');
+            const isActive = item.classList.contains('active');
+            
+            // Close all accordion items in the same parent
+            const accordion = item.closest('.accordion');
+            accordion.querySelectorAll('.accordion-item').forEach(i => {
+                i.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value;
+            if (searchTerm.trim()) {
+                alert('Searching for: ' + searchTerm + '\n\nIn a full implementation, this would query the NASA Task Book database and display filtered results.');
+            } else {
+                alert('Please enter a search term');
+            }
+        }
+
+        // Initialize first accordion item as open
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstAccordion = document.querySelector('.accordion-item');
+            if (firstAccordion) {
+                firstAccordion.classList.add('active');
+            }
+        });
+    </script>
+
+</body>
+</html>
