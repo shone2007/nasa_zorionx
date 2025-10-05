@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA OSDR: Open Science for Life in Space</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 150, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #0096ff, #00d4ff, #0096ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 150, 255, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #66b3ff;
+            margin-top: 15px;
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+        }
+
+        .search-section {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 150, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 800px;
+            padding: 18px 30px;
+            font-size: 1.15em;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #66b3ff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0096ff;
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.4), inset 0 0 20px rgba(0, 150, 255, 0.1);
+            background: rgba(0, 20, 40, 0.8);
+        }
+
+        .search-input::placeholder {
+            color: rgba(0, 150, 255, 0.5);
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            background: rgba(0, 20, 40, 0.6);
+            padding: 12px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group:hover {
+            border-color: rgba(0, 150, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.3);
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #66b3ff;
+            font-size: 0.95em;
+        }
+
+        .filter-select {
+            padding: 6px 12px;
+            background: rgba(0, 40, 80, 0.8);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            border-radius: 10px;
+            color: #99ccff;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            border-color: #0096ff;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .results-count {
+            font-size: 1.3em;
+            color: #66b3ff;
+            background: rgba(0, 20, 40, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+        }
+
+        .studies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .study-card {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(0, 150, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+        }
+
+        .study-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.1), rgba(0, 212, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .study-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 150, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .study-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 150, 255, 0.4), 0 0 40px rgba(0, 150, 255, 0.2);
+            border-color: rgba(0, 150, 255, 0.6);
+        }
+
+        .study-card:hover::before {
+            opacity: 1;
+        }
+
+        .study-card:hover::after {
+            width: 400px;
+            height: 400px;
+        }
+
+        .study-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #66b3ff;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+            line-height: 1.4;
+        }
+
+        .study-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta-section {
+            background: rgba(0, 20, 40, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .meta-section:hover {
+            background: rgba(0, 40, 80, 0.8);
+            border-color: rgba(0, 150, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 150, 255, 0.2);
+        }
+
+        .meta-section h4 {
+            font-size: 0.85em;
+            color: #0096ff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+        }
+
+        .meta-list {
+            list-style: none;
+        }
+
+        .meta-list li {
+            margin-bottom: 6px;
+            color: #99ccff;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .release-date {
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 100, 200, 0.2);
+            border-radius: 15px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            font-size: 1.05em;
+        }
+
+        .description {
+            font-size: 0.95em;
+            color: #99ccff;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-tag {
+            background: linear-gradient(135deg, #0096ff, #00d4ff);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 150, 255, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .highlight-tag:hover {
+            transform: scale(1.15) translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 150, 255, 0.5);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 40px;
+            color: #66b3ff;
+            font-size: 1.4em;
+            background: rgba(0, 20, 40, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            color: #66b3ff;
+            margin-top: 50px;
+            text-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 1024px) {
+            .study-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .studies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .search-section {
+                padding: 20px;
+            }
+
+            .study-card {
+                padding: 20px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1>NASA OSDR: Open Science for Life in Space</h1>
+            <p class="subtitle">Explore the Open Science Data Repository</p>
+        </header>
+
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search studies by title, organism, or description...">
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="dataSource">Data Source:</label>
+                    <select id="dataSource" class="filter-select">
+                        <option value="">All</option>
+                        <option value="cgene">CGene</option>
+                        <option value="alsda">ALSDA</option>
+                        <option value="esa">ESA</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dataType">Data Type:</label>
+                    <select id="dataType" class="filter-select">
+                        <option value="">All</option>
+                        <option value="study">Study</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortBy">Sort By:</label>
+                    <select id="sortBy" class="filter-select">
+                        <option value="date-desc">Release Date (Newest)</option>
+                        <option value="date-asc">Release Date (Oldest)</option>
+                        <option value="title">Title</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">Showing 10 results</div>
+            </div>
+            <div class="studies-grid" id="studiesGrid">
+                <!-- Studies will be populated by JavaScript -->
+            </div>
+            <div class="no-results" id="noResults" style="display: none;">
+                No results found. Try adjusting your search or filters.
+            </div>
+        </section>
+
+        <footer>
+            <p>🌌 Advancing Life Sciences in Space | NASA Open Science Data Repository</p>
+        </footer>
+    </div>
+
+    <script>
+        const studies = [
+            {
+                id: 1,
+                title: "PH-04 Chile Peppers in Space",
+                organisms: ["Microbiota"],
+                factors: ["Spaceflight", "Organism Part", "Sample Location"],
+                assays: ["Amplicon Sequencing"],
+                date: "09-Sep-2025",
+                description: "Growing plants in spaceflight presents challenges to achieve optimal plant growth and productivity. One of NASA's goals is growing edible crops in spaceflight to supplement the astronauts' diet with f...",
+                highlights: ["cgene"]
+            },
+            {
+                id: 2,
+                title: "Analysis of Vegetable Seedlings Grown in Contact with Apollo 14 Lunar Surface Fines",
+                organisms: ["Brassica oleracea", "Lactuca sativa", "Raphanus sativus", "Daucus carota"],
+                factors: ["Treatment", "Growth Medium Provenance"],
+                assays: ["Spectrochemical Analysis", "Germination and Growth Assesment"],
+                date: "15-Aug-2025",
+                description: "Chemical analysis and other measurements made on lunar-treated plant seedlings grown for 14 to 21 days demonstrate a direct interaction between germfree plants and lunar material. Treated plants disso...",
+                highlights: ["alsda"]
+            },
+            {
+                id: 3,
+                title: "Life long effects of radiation and high fat diet on the mouse right ventricular tissue",
+                organisms: ["Mus musculus"],
+                factors: ["Sex", "Ionizing Radiation", "Diet", "Age at Sample Collection"],
+                assays: ["transcription profiling"],
+                date: "25-Jun-2025",
+                description: "We studied the long-term effects of single whole-body gamma and simulated GCR irradiation (IR) and consumption of a Western Diet (WD) on the heart's right ventricle (RV). Three-month-old C57Bl/6J wild...",
+                highlights: ["cgene"]
+            },
+            {
+                id: 4,
+                title: "Apollo 17 Challenge System - Seed Germination (Cabbage, Brussel Sprouts, Radish and Lettuce)",
+                organisms: ["Lactuca sativa", "Raphanus sativus", "Brassica oleracea"],
+                factors: ["soil environment exposure", "growth medium provenance"],
+                assays: ["Germination and Growth Assesment"],
+                date: "18-Jun-2025",
+                description: "Analyses of effects of lunar materials on plants: This study was designed to determine if lunar material can cause disease in plants grown under controlled conditions and to assess the effects of luna...",
+                highlights: ["alsda"]
+            },
+            {
+                id: 5,
+                title: "Simulated microgravity triggers a membrane adaptation to stress in E. coli REL606",
+                organisms: ["Escherichia coli"],
+                factors: ["Microgravity Simulation", "Time", "Growth Medium"],
+                assays: ["transcription profiling", "genome sequencing"],
+                date: "09-Jun-2025",
+                description: "Investigating the evolution of Escherichia coli in microgravity offers valuable insights into microbial adaptation to extreme environments. Here the effects of simulated microgravity (SµG) on gene exp...",
+                highlights: ["cgene"]
+            },
+            {
+                id: 6,
+                title: "Effects of 5-Ion Beam Irradiation and Hindlimb Unloading on Metabolic Pathways in Plasma and Brain of Behaviorally Tested WAG/Rij Rats",
+                organisms: ["Rattus norvegicus"],
+                factors: ["Ionizing Radiation", "Hindlimb Unloading", "Absorbed Radiation Dose"],
+                assays: ["Behavior"],
+                date: "02-Jun-2025",
+                description: "A limitation of simulated space radiation studies is that radiation exposure is not the only environmental challenge astronauts face during missions. Therefore, we characterized behavioral and cogniti...",
+                highlights: ["alsda"]
+            },
+            {
+                id: 7,
+                title: "Impact of simulated microgravity on the growth and proteomic profile of Enterobacter cloacae",
+                organisms: ["Enterobacter cloacae"],
+                factors: ["Microgravity Simulation", "Growth Environment"],
+                assays: ["protein expression profiling"],
+                date: "28-Mar-2025",
+                description: "The proteomics experiment involved analyzing the protein expression profiles of Enterobacter cloacae under different gravity conditions simulated in High Aspect Ratio Vessels (HARVs). The three condit...",
+                highlights: ["cgene"]
+            },
+            {
+                id: 8,
+                title: "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Hippocampus; ECLIA)",
+                organisms: ["Mus musculus"],
+                factors: ["Spaceflight"],
+                assays: ["Immunoassay"],
+                date: "10-Mar-2025",
+                description: "Space exploration exposes astronauts to stressors that alter the immune response, rendering them vulnerable to infections and diseases. In this study, we aimed to determine the levels of inflammasome ...",
+                highlights: ["alsda"]
+            },
+            {
+                id: 9,
+                title: "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Cortex; ECLIA)",
+                organisms: ["Mus musculus"],
+                factors: ["Spaceflight"],
+                assays: ["Immunoassay"],
+                date: "10-Mar-2025",
+                description: "Space exploration exposes astronauts to stressors that alter the immune response, rendering them vulnerable to infections and diseases. In this study, we aimed to determine the levels of inflammasome ...",
+                highlights: ["alsda", "cgene"]
+            },
+            {
+                id: 10,
+                title: "Effects of Space Flight on Inflammasome Activation in the Brain of Mice (Brain, Western Blot and ECLIA)",
+                organisms: ["Mus musculus"],
+                factors: ["Spaceflight"],
+                assays: ["protein quantification", "Immunoassay"],
+                date: "10-Mar-2025",
+                description: "Space exploration exposes astronauts to stressors that alter the immune response, rendering them vulnerable to infections and diseases. In this study, we aimed to determine the levels of inflammasome ...",
+                highlights: ["alsda", "cgene"]
+            }
+        ];
+
+        let filteredStudies = [...studies];
+
+        // Create stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 3;
+                const delay = Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Add shooting stars
+            for (let i = 0; i < 5; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = 2 + Math.random() * 2;
+                
+                shootingStar.style.left = `${x}%`;
+                shootingStar.style.top = `${y}%`;
+                shootingStar.style.animationDelay = `${delay}s`;
+                shootingStar.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        function renderStudies(studiesToRender) {
+            const grid = document.getElementById('studiesGrid');
+            const noResults = document.getElementById('noResults');
+            const count = document.getElementById('resultsCount');
+
+            if (studiesToRender.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                count.textContent = 'No results found';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            count.textContent = `Showing ${studiesToRender.length} results`;
+
+            grid.innerHTML = studiesToRender.map(study => `
+                <div class="study-card">
+                    <div class="study-title">${study.title}</div>
+                    <div class="study-meta">
+                        <div class="meta-section">
+                            <h4>Organisms</h4>
+                            <ul class="meta-list">
+                                ${study.organisms.map(org => `<li>${org}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="meta-section">
+                            <h4>Factors</h4>
+                            <ul class="meta-list">
+                                ${study.factors.map(fac => `<li>${fac}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="meta-section">
+                            <h4>Assay Types</h4>
+                            <ul class="meta-list">
+                                ${study.assays.map(ass => `<li>${ass}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="release-date">Release Date: ${study.date}</div>
+                    <div class="description">${study.description}</div>
+                    <div class="highlights">
+                        ${study.highlights.map(tag => `<span class="highlight-tag">${tag.toUpperCase()}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filterStudies(query);
+        });
+
+        document.getElementById('dataSource').addEventListener('change', (e) => {
+            filterStudies(document.getElementById('searchInput').value.toLowerCase(), e.target.value);
+        });
+
+        document.getElementById('dataType').addEventListener('change', (e) => {
+            filterStudies(document.getElementById('searchInput').value.toLowerCase(), document.getElementById('dataSource').value);
+        });
+
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+            sortStudies(e.target.value);
+        });
+
+        function filterStudies(query = '', dataSource = '') {
+            filteredStudies = studies.filter(study => {
+                const matchesQuery = study.title.toLowerCase().includes(query) ||
+                                     study.description.toLowerCase().includes(query) ||
+                                     study.organisms.some(org => org.toLowerCase().includes(query));
+                const matchesSource = !dataSource || study.highlights.some(h => h.toLowerCase() === dataSource.toLowerCase());
+                return matchesQuery && matchesSource;
+            });
+            sortStudies(document.getElementById('sortBy').value);
+        }
+
+        function sortStudies(sortBy) {
+            let sorted = [...filteredStudies];
+            if (sortBy === 'date-desc') {
+                sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortBy === 'date-asc') {
+                sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortBy === 'title') {
+                sorted.sort((a, b) => a.title.localeCompare(b.title));
+            }
+            renderStudies(sorted);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            renderStudies(studies);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Data Repository Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin-bottom: 60px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #00ff88, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #00ffaa;
+            margin-top: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+
+        .search-container {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 700px;
+            padding: 18px 30px;
+            font-size: 1.15em;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 20, 20, 0.8);
+        }
+
+        .search-box::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            margin: 80px 0;
+            padding: 0 40px;
+        }
+
+        .category-card {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 60px 40px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 170, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: 0 25px 70px rgba(0, 255, 255, 0.5), 0 0 50px rgba(0, 255, 255, 0.3);
+            border-color: rgba(0, 255, 255, 0.7);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover::after {
+            width: 500px;
+            height: 500px;
+        }
+
+        .category-icon {
+            font-size: 6em;
+            margin-bottom: 30px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6));
+            transition: transform 0.4s;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.3) rotate(5deg);
+        }
+
+        .category-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            color: #00ffff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        .category-desc {
+            color: #88ffdd;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+            line-height: 1.8;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .category-stats {
+            margin-top: 30px;
+            display: flex;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #88ffdd;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #00ff88;
+            margin-top: 80px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 1024px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 0 20px;
+            }
+
+            h1 {
+                font-size: 3em;
+            }
+
+            .category-card {
+                min-height: 350px;
+                padding: 50px 30px;
+            }
+
+            .category-icon {
+                font-size: 5em;
+            }
+
+            .category-title {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .category-card {
+                min-height: 300px;
+                padding: 40px 25px;
+            }
+
+            .category-icon {
+                font-size: 4em;
+            }
+
+            .category-title {
+                font-size: 1.8em;
+            }
+
+            .category-desc {
+                font-size: 1.1em;
+            }
+
+            .category-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1>NASA Data Repository Hub</h1>
+            <p class="subtitle">Explore Space Science Data & Research</p>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search datasets and studies..." id="searchBox">
+            </div>
+        </header>
+
+        <div class="categories-grid" id="categoriesGrid">
+            <div class="category-card" onclick="window.location.href='sub2code1.html'">
+                <span class="category-icon">🧬</span>
+                <h2 class="category-title">Biological Data</h2>
+                <p class="category-desc">Human health, animal models, plant biology, microbiomes, and space life sciences research</p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">450+</div>
+                        <div class="stat-label">Datasets</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">600+</div>
+                        <div class="stat-label">Studies</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card" onclick="window.location.href='sub2code2.html'">
+                <span class="category-icon">🔬</span>
+                <h2 class="category-title">Physical Science Data</h2>
+                <p class="category-desc">Fluid physics, materials science, combustion, and microgravity research investigations</p>
+                <div class="category-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">Investigations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5TB+</div>
+                        <div class="stat-label">Data</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Advancing Science Beyond Earth | NASA Open Science Data Repository</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 3;
+                const delay = Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Add shooting stars
+            for (let i = 0; i < 5; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = 2 + Math.random() * 2;
+                
+                shootingStar.style.left = `${x}%`;
+                shootingStar.style.top = `${y}%`;
+                shootingStar.style.animationDelay = `${delay}s`;
+                shootingStar.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchBox = document.getElementById('searchBox');
+            
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                document.querySelectorAll('.category-card').forEach(card => {
+                    const title = card.querySelector('.category-title').textContent.toLowerCase();
+                    const desc = card.querySelector('.category-desc').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>

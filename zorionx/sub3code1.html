@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabidopsis Spaceflight Meta-Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            color: #e0e7ff;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(79, 195, 247, 0.3);
+            box-shadow: 0 0 40px rgba(79, 195, 247, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #4fc3f7, #90caf9, #4fc3f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #90caf9;
+            margin-top: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px 15px 0 0;
+            padding: 0 10px;
+        }
+
+        .nav-button {
+            padding: 18px 25px;
+            background: transparent;
+            border: none;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .nav-button:hover {
+            color: #4fc3f7;
+            background: rgba(79, 195, 247, 0.1);
+        }
+
+        .nav-button.active {
+            color: #4fc3f7;
+            border-bottom-color: #4fc3f7;
+            background: rgba(79, 195, 247, 0.15);
+        }
+
+        .content-section {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 20px 20px;
+            padding: 40px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            min-height: 600px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #4fc3f7;
+            margin-bottom: 25px;
+            text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+        }
+
+        .subsection-title {
+            font-size: 1.5em;
+            color: #90caf9;
+            margin: 30px 0 15px 0;
+        }
+
+        .highlight {
+            background: rgba(79, 195, 247, 0.15);
+            padding: 20px;
+            border-left: 4px solid #4fc3f7;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.1);
+        }
+
+        .gene-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(79, 195, 247, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .gene-card:hover {
+            border-color: rgba(79, 195, 247, 0.5);
+            box-shadow: 0 0 30px rgba(79, 195, 247, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .gene-card h3 {
+            color: #4fc3f7;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .gene-label {
+            display: inline-block;
+            background: rgba(174, 213, 129, 0.2);
+            color: #aed581;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+            border: 1px solid rgba(174, 213, 129, 0.3);
+        }
+
+        .metadata-panel {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(79, 195, 247, 0.2);
+            margin-top: 15px;
+        }
+
+        .metadata-panel ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .metadata-panel li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(79, 195, 247, 0.1);
+            color: #c9d1d9;
+        }
+
+        .metadata-panel li:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, #4fc3f7, #007bff);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.5);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px solid rgba(79, 195, 247, 0.2);
+        }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        ul, ol {
+            padding-left: 25px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #c9d1d9;
+        }
+
+        a {
+            color: #4fc3f7;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        a:hover {
+            color: #90caf9;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+
+        strong {
+            color: #90caf9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #4fc3f7;
+            margin-top: 50px;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .nav-button {
+                padding: 15px 18px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1>Arabidopsis Spaceflight Meta-Analysis</h1>
+            <p class="subtitle">Transcriptomic insights from 15 NASA GeneLab experiments</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-button active" onclick="showTab('methods')">Methods & Matrix</button>
+            <button class="nav-button" onclick="showTab('go-enrichment')">GO Enrichment</button>
+            <button class="nav-button" onclick="showTab('conserved')">Conserved Genes</button>
+            <button class="nav-button" onclick="showTab('confounding')">Confounding Variables</button>
+            <button class="nav-button" onclick="showTab('metadata')">Metadata Matrix</button>
+            <button class="nav-button" onclick="showTab('implications')">Implications</button>
+        </nav>
+
+        <div class="content-section">
+            <!-- Methods & Matrix Tab -->
+            <div id="tab-methods" class="tab-content active">
+                <h2 class="section-title">Standardized Bioinformatics Pipeline</h2>
+                
+                <p>This study reanalyzed 15 Arabidopsis thaliana spaceflight experiments using a unified pipeline to identify consistent transcriptomic responses to microgravity, radiation, and hardware conditions.</p>
+                
+                <div class="highlight">
+                    <strong>Key Insight:</strong> Assay type (RNA-seq vs microarray) had a stronger impact on gene clustering than spaceflight itself (PCA1 = 83%).
+                </div>
+
+                <h3 class="subsection-title">The Curated Metadata Matrix</h3>
+                <p>The "Matrix" is a statistical tool used to quantify the similarity of experimental conditions between the 15 studies. This allowed researchers to group studies that were most similar in their non-spaceflight parameters.</p>
+                
+                <div class="gene-card">
+                    <h3>Matrix Functionality:</h3>
+                    <ul>
+                        <li><strong>Quantify Similarity:</strong> It assigned scores based on shared factors like age, genotype, light cycle, and mission hardware.</li>
+                        <li><strong>Identify Confounders:</strong> Systematically flagged non-spaceflight factors (e.g., light, hardware) that contribute most to transcriptional variance.</li>
+                        <li><strong>Enable Targeted Grouping:</strong> Facilitated the comparison of only those datasets that shared high similarity scores to isolate the core microgravity signal.</li>
+                    </ul>
+                </div>
+
+                <h3 class="subsection-title">Analysis Process Highlights</h3>
+                <ul>
+                    <li><strong>Microarray:</strong> Robust Multi-array Average (RMA) used for normalization</li>
+                    <li><strong>RNA-seq:</strong> Reads aligned to the TAIR10 genome and normalized using Trimmed Mean of M-values (TMM)</li>
+                    <li><strong>Differential Expression:</strong> Genes showing significant differential expression (DEGs) in spaceflight versus ground controls were identified using consistent statistical thresholds</li>
+                </ul>
+            </div>
+
+            <!-- GO Enrichment Tab -->
+            <div id="tab-go-enrichment" class="tab-content">
+                <h2 class="section-title">Gene Ontology Enrichment Analysis</h2>
+                
+                <p>The common pipeline confirmed strong regulation in key physiological areas. The following chart shows the top enriched GO terms based on gene count and enrichment strength:</p>
+
+                <div class="chart-container">
+                    <canvas id="goChart"></canvas>
+                </div>
+
+                <h3 class="subsection-title">Top Functional Categories</h3>
+                <ul>
+                    <li><strong>Photosynthesis:</strong> 58 genes - Core energy production pathways affected</li>
+                    <li><strong>Oxidative Stress:</strong> 90 genes - Response to reactive oxygen species</li>
+                    <li><strong>Cold Response:</strong> 67 genes - Stress adaptation mechanisms</li>
+                    <li><strong>Cell Wall Biogenesis:</strong> 19 genes - Structural modifications</li>
+                    <li><strong>Cadmium Ion Response:</strong> 130 genes - Metal ion homeostasis</li>
+                </ul>
+            </div>
+
+            <!-- Conserved Genes Tab -->
+            <div id="tab-conserved" class="tab-content">
+                <h2 class="section-title">Conserved Spaceflight Response Genes</h2>
+
+                <div class="highlight">
+                    Six genes showed conserved responses across multiple BRIC hardware studies, suggesting fundamental microgravity stress response mechanisms.
+                </div>
+
+                <div class="gene-card">
+                    <h3>COR78</h3>
+                    <span class="gene-label">Cold-Responsive</span>
+                    <span class="gene-label">ROS Disruption</span>
+                    <p>Cold-responsive gene consistently upregulated in spaceflight conditions. Linked to stress adaptation and plastid redox signaling. Implies altered Reactive Oxygen Species (ROS) homeostasis in the plastid.</p>
+                </div>
+
+                <div class="gene-card">
+                    <h3>HSP101</h3>
+                    <span class="gene-label">Heat Shock Protein</span>
+                    <span class="gene-label">Proteotoxic Stress</span>
+                    <p>Heat shock protein involved in protein folding and stress recovery. Shows conserved expression changes across multiple datasets. Upregulated, linked to plastid protection.</p>
+                </div>
+
+                <h3 class="subsection-title">Matrix-Driven Discoveries</h3>
+                <div class="gene-card">
+                    <h3>Novel Findings:</h3>
+                    <ul>
+                        <li><strong>Hypoxia Signature:</strong> Strong transcriptional fingerprint of low oxygen due to reduced buoyancy-driven convection in the fluid phase</li>
+                        <li><strong>Ion & Water Transport:</strong> Novel changes in genes associated with nutrient uptake and stomatal behavior</li>
+                    </ul>
+                </div>
+
+                <p class="highlight">The high conservation suggests a fundamental microgravity stress response mechanism centered on <strong>plastid function</strong>.</p>
+            </div>
+
+            <!-- Confounding Variables Tab -->
+            <div id="tab-confounding" class="tab-content">
+                <h2 class="section-title">The Dominance of Non-Microgravity Variables</h2>
+
+                <p>The meta-analysis quantitatively confirmed that non-spaceflight experimental factors often introduce the largest amount of transcriptional variance, overwhelming the true microgravity signal in raw data clustering (batch effects).</p>
+
+                <h3 class="subsection-title">Breakdown of Transcriptional Variance (PCA Results)</h3>
+                
+                <div class="gene-card">
+                    <h3>Principal Component 1: Assay Technique (83%)</h3>
+                    <p>The choice between RNA-seq and microarray was the single largest confounding factor, explaining approximately 83% of the variance. Datasets clustered based on technology used rather than the gravity condition.</p>
+                </div>
+
+                <div class="gene-card">
+                    <h3>Flight Hardware</h3>
+                    <p>The specific flight hardware (e.g., BRIC, EMCS) imposed significant confounding effects due to unique internal microenvironments (air speed, temperature gradients, gas composition).</p>
+                </div>
+
+                <div class="gene-card">
+                    <h3>Environmental & Biological Factors</h3>
+                    <p>Other variables like lighting conditions (light vs. dark growth), time in flight, and plant age at fixation also contributed noticeably to separating the datasets.</p>
+                </div>
+
+                <div class="highlight">
+                    This finding underscores the study's central tenet: standardized processing and sophisticated metadata analysis (The Matrix) are necessary to extract biological signal from technological noise.
+                </div>
+            </div>
+
+            <!-- Metadata Matrix Tab -->
+            <div id="tab-metadata" class="tab-content">
+                <h2 class="section-title">Experimental Metadata Matrix</h2>
+                
+                <p>Detailed metadata for the 15 experiments analyzed in this study, showing hardware platforms, tissue types, and data generation methods.</p>
+
+                <button class="toggle-btn" onclick="toggleMetadata()">Show/Hide Metadata Details</button>
+                
+                <div class="metadata-panel" id="metadataPanel" style="display: none;">
+                    <ul>
+                        <li><strong>GLDS-7:</strong> ABRS hardware, multiple tissues, RNA-seq</li>
+                        <li><strong>GLDS-37:</strong> BRIC hardware, multiple ecotypes, microarray</li>
+                        <li><strong>GLDS-38:</strong> BRIC, RNA-seq + proteomics</li>
+                        <li><strong>GLDS-120:</strong> ISS Petri plate setup, mixed lighting, RNA-seq</li>
+                        <li><strong>Additional datasets:</strong> Various combinations of BRIC, EMCS, and specialized hardware configurations</li>
+                    </ul>
+                </div>
+
+                <h3 class="subsection-title">External Tools & Resources</h3>
+                <div class="highlight">
+                    <p>Explore the full connectivity network and metadata matrix at:</p>
+                    <p><a href="https://gilroy-qlik.botany.wisc.edu/a/sense/app/20aa802b-6915-4b1a-87bd-c029a1812e2b/sheet/6241e71a-a3c5-4c63-9210-e05c743699d7/state/analysis" target="_blank">Gilroy Qlik Dashboard →</a></p>
+                    <p>Access raw datasets via <a href="https://genelab-data.ndc.nasa.gov/genelab/projects" target="_blank">NASA GeneLab →</a></p>
+                </div>
+            </div>
+
+            <!-- Implications Tab -->
+            <div id="tab-implications" class="tab-content">
+                <h2 class="section-title">Implications for Space Life Sciences</h2>
+
+                <p>These findings help refine experimental design for future space biology missions and identify molecular markers for stress adaptation in extraterrestrial environments.</p>
+
+                <h3 class="subsection-title">Key Takeaways</h3>
+                <ul>
+                    <li><strong>Standardization Works:</strong> Applying a common pipeline effectively reduced noise and enabled the detection of conserved DEGs that were often masked or missed in individual reports</li>
+                    <li><strong>Matrix Utility:</strong> Future researchers should use the Matrix similarity scores to select highly comparable datasets for deeper analysis, maximizing the likelihood of finding a true microgravity response</li>
+                </ul>
+
+                <h3 class="subsection-title">Focus Areas for Future Research</h3>
+                <ol>
+                    <li><strong>Variable Light Regimes:</strong> Study the impact of non-optimal light cycles and intensity on plant growth and productivity, as light is a known, strong environmental variable in space habitats</li>
+                    <li><strong>Plastid Redox Activity:</strong> Conduct targeted experiments to uncover the causes and mechanisms behind the altered redox activities and antioxidant system disruptions specifically in the plant plastids (linked to HSP101/COR78)</li>
+                    <li><strong>Gene Validation:</strong> Perform functional studies on the identified six core conserved response genes to fully confirm their essential role in space adaptation and survival</li>
+                </ol>
+
+                <div class="highlight">
+                    <strong>Publication:</strong> Published in npj Microgravity (2023) | Supported by NASA & Biodesign Institute
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Advancing Plant Science for Space Exploration | NASA Life Sciences Data Repository</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 3;
+                const delay = Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = 2 + Math.random() * 2;
+                
+                shootingStar.style.left = `${x}%`;
+                shootingStar.style.top = `${y}%`;
+                shootingStar.style.animationDelay = `${delay}s`;
+                shootingStar.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // Tab navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'go-enrichment') {
+                initializeChart();
+            }
+        }
+
+        // Toggle metadata
+        function toggleMetadata() {
+            const panel = document.getElementById('metadataPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Chart initialization
+        let goChartInstance = null;
+
+        function initializeChart() {
+            const ctx = document.getElementById('goChart');
+            
+            if (goChartInstance) {
+                goChartInstance.destroy();
+            }
+
+            goChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Photosynthesis',
+                        'Oxidative Stress',
+                        'Cold Response',
+                        'Cell Wall Biogenesis',
+                        'Cadmium Ion Response'
+                    ],
+                    datasets: [{
+                        label: 'Gene Count',
+                        data: [58, 90, 67, 19, 130],
+                        backgroundColor: [
+                            '#4fc3f7',
+                            '#81d4fa',
+                            '#e57373',
+                            '#ba68c8',
+                            '#aed581'
+                        ],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Top Enriched GO Terms',
+                            color: '#fff',
+                            font: { size: 18, weight: '600' }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'GO Term',
+                                color: '#fff'
+                            },
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Gene Count',
+                                color: '#fff'
+                            },
+                            beginAtZero: true,
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            initializeChart();
+        });
+    </script>
+</body>
+</html>
