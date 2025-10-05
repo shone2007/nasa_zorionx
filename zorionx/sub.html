@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Biology Research Hub</title>
+    <!-- Load Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shoot 3s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00ffff, #00ff88, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #00ffaa;
+            margin-top: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 170, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2);
+            border-color: rgba(0, 255, 255, 0.6);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .category-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+            transition: transform 0.4s;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .category-title {
+            font-size: 1.6em;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .category-desc {
+            color: #88ffdd;
+            font-size: 1em;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        /* Pie Chart Section Styles */
+        .chart-section {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 60px 0;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .chart-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .chart-subtitle {
+            font-size: 1.2em;
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            max-width: 800px;
+        }
+
+        .chart-note {
+            text-align: center;
+            margin-top: 20px;
+            color: #88ffdd;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(0, 0, 0, 0.95);
+            margin: 50px auto;
+            padding: 45px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 25px;
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.3), 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.4s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.4);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 255, 0.6);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5em;
+            color: #00ffff;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 0, 100, 0.3);
+            border-color: rgba(255, 0, 100, 0.6);
+            transform: rotate(90deg);
+            box-shadow: 0 0 20px rgba(255, 0, 100, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 3.5em;
+            margin-right: 25px;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6));
+        }
+
+        .modal-title {
+            font-size: 2.2em;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .subcategories-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .subcategory-card {
+            background: rgba(0, 20, 20, 0.6);
+            border-radius: 18px;
+            padding: 25px;
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .subcategory-card:hover {
+            background: rgba(0, 40, 40, 0.8);
+            transform: translateX(10px);
+            border-color: rgba(0, 255, 255, 0.5);
+            box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .subcategory-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .subcategory-icon {
+            font-size: 2em;
+            margin-right: 18px;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 170, 0.5));
+        }
+
+        .subcategory-title {
+            font-size: 1.4em;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        .papers-list {
+            list-style: none;
+            margin-left: 60px;
+        }
+
+        .paper-item {
+            margin: 12px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            border-left: 3px solid #00ffaa;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .paper-item:hover {
+            background: rgba(0, 255, 170, 0.1);
+            transform: translateX(10px);
+            border-left-width: 5px;
+            box-shadow: 0 4px 20px rgba(0, 255, 170, 0.2);
+        }
+
+        .paper-item a {
+            color: #aaffee;
+            text-decoration: none;
+            font-size: 1em;
+            line-height: 1.7;
+            display: block;
+            transition: color 0.3s;
+        }
+
+        .paper-item a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+
+        .search-container {
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 650px;
+            padding: 18px 30px;
+            font-size: 1.15em;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 20, 20, 0.8);
+        }
+
+        .search-box::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            color: #00ff88;
+            margin-top: 50px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 30px;
+                margin: 20px auto;
+            }
+
+            .papers-list {
+                margin-left: 25px;
+            }
+
+            .category-card {
+                padding: 25px;
+            }
+            
+            .chart-section {
+                padding: 25px;
+            }
+            
+            .chart-title {
+                font-size: 1.8em;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <header>
+            <h1>🚀 Space Biology Research Hub</h1>
+            <p class="subtitle">Explore the Frontiers of Life Beyond Earth</p>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="🔍 Search research topics..." id="searchBox">
+            </div>
+        </header>
+
+        <div class="categories-grid" id="categoriesGrid">
+            <div class="category-card" onclick="openModal('human')">
+                <span class="category-icon">🧑‍🚀</span>
+                <h2 class="category-title">Human Health</h2>
+                <p class="category-desc">Astronaut biology, omics, genetics, organ health, and aging studies</p>
+            </div>
+
+            <div class="category-card" onclick="openModal('animal')">
+                <span class="category-icon">🐭</span>
+                <h2 class="category-title">Animal Models</h2>
+                <p class="category-desc">Rodent studies on bone, neurology, cardiovascular, and metabolism</p>
+            </div>
+
+            <div class="category-card" onclick="openModal('plant')">
+                <span class="category-icon">🌱</span>
+                <h2 class="category-title">Plant Biology</h2>
+                <p class="category-desc">Gravitropism, light responses, transcriptomics, and space agriculture</p>
+            </div>
+
+            <div class="category-card" onclick="openModal('microbe')">
+                <span class="category-icon">🦠</span>
+                <h2 class="category-title">Microbes & Microbiomes</h2>
+                <p class="category-desc">ISS microbiome, pathogens, fungi, and astronaut microbial health</p>
+            </div>
+
+            <div class="category-card" onclick="openModal('invertebrate')">
+                <span class="category-icon">🪱</span>
+                <h2 class="category-title">Invertebrate Models</h2>
+                <p class="category-desc">Drosophila, C. elegans, tardigrades, and yeast research</p>
+            </div>
+
+            <div class="category-card" onclick="openModal('radiation')">
+                <span class="category-icon">⚡</span>
+                <h2 class="category-title">Radiation & Omics</h2>
+                <p class="category-desc">Space radiation effects, DNA damage, and multi-omics platforms</p>
+            </div>
+        </div>
+
+        <!-- Pie Chart Section -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Distribution of Space Biology Publication Topics</h2>
+                <p class="chart-subtitle">Categorization based on keyword analysis of 607 publication titles</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="publicationPieChart"></canvas>
+            </div>
+            <p class="chart-note">
+                Note: Percentages under 5% have been aggregated into the 'Other/General Topics' category for clarity.
+            </p>
+        </div>
+
+        <footer>
+            <p>🌌 Advancing Knowledge in Space Life Sciences | Data from NASA GeneLab & NCBI</p>
+        </footer>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <script>
+        const categories = {
+            human: {
+                icon: '🧑‍🚀',
+                title: 'Human Health & Astronaut Biology',
+                subcategories: [
+                    {
+                        icon: '🔬',
+                        title: 'Omics & Systems Biology',
+                        papers: [
+                            { title: 'Astronaut omics and the impact of space on the human body at scale', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166943/' },
+                            { title: 'The Space Omics and Medical Atlas (SOMA)', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11357981/' },
+                            { title: 'Routine omics collection in space research', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9583032/' },
+                            { title: 'Inspiration4 data access through NASA Open Science Data Repository', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11094041/' },
+                            { title: 'Molecular and physiologic changes in the SpaceX Inspiration4 civilian crew', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11357997/' }
+                        ]
+                    },
+                    {
+                        icon: '🧬',
+                        title: 'Genetics & Epigenetics',
+                        papers: [
+                            { title: 'Telomeric RNA (TERRA) increases in response to spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11167063/' },
+                            { title: 'Genome and clonal hematopoiesis stability contrasts with immune changes', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11022651/' }
+                        ]
+                    },
+                    {
+                        icon: '🫀',
+                        title: 'Organ-Specific Health',
+                        papers: [
+                            { title: 'Cosmic kidney disease', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11167060/' },
+                            { title: 'Spatial multi-omics of human skin reveals KRAS and inflammatory responses', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166909/' },
+                            { title: 'Transcriptomics analysis reveals molecular alterations underpinning spaceflight dermatology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166967/' }
+                        ]
+                    },
+                    {
+                        icon: '🧑‍⚕️',
+                        title: 'Reproductive & Gender Health',
+                        papers: [
+                            { title: 'Extraterrestrial Gynecology: Cancer risk in female astronauts', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9267413/' },
+                            { title: 'Effects of Sex and Gender on Adaptation to Space: Immune System', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7467030/' },
+                            { title: 'To boldly go where no microRNAs have gone before', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11484870/' }
+                        ]
+                    },
+                    {
+                        icon: '🧠',
+                        title: 'Immune System',
+                        papers: [
+                            { title: 'Single-cell analysis identifies conserved features of immune dysfunction', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166937/' },
+                            { title: 'Longitudinal multi-omics analysis of host microbiome and immune responses', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11222149/' },
+                            { title: 'Neutrophil to Lymphocyte ratio as biomarker', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7667275/' }
+                        ]
+                    },
+                    {
+                        icon: '🧓',
+                        title: 'Aging & Frailty',
+                        papers: [
+                            { title: 'Aging and frailty biomarkers altered by spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166946/' },
+                            { title: 'Endocrine Effects of Space Flight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11833055/' }
+                        ]
+                    }
+                ]
+            },
+            animal: {
+                icon: '🐭',
+                title: 'Animal Models',
+                subcategories: [
+                    {
+                        icon: '🦴',
+                        title: 'Bone & Musculoskeletal',
+                        papers: [
+                            { title: 'Microgravity induces pelvic bone loss', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3630201/' },
+                            { title: 'High-precision method for cyclic loading of small-animal vertebrae', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6222041/' },
+                            { title: 'Effects of ex vivo ionizing radiation on collagen structure', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6813909/' },
+                            { title: 'Spaceflight-induced bone loss alters failure mode', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5477841/' },
+                            { title: 'Effects of Spaceflight on Cancellous and Cortical Bone in Rats', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7907224/' },
+                            { title: '37-day microgravity exposure in female mice causes bone loss', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11940681/' }
+                        ]
+                    },
+                    {
+                        icon: '🧠',
+                        title: 'Neurology & Sensory',
+                        papers: [
+                            { title: 'Spaceflight alters cerebral artery vasomotor properties in mice', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4385880/' },
+                            { title: 'Impact of Spaceflight and Artificial Gravity on Mouse Retina', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6165321/' },
+                            { title: 'Gene expression profiles in mouse brain after 35 days spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9365836/' },
+                            { title: 'Proteomic analysis of mouse brain subjected to spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6337482/' },
+                            { title: 'Spaceflight-induced gene expression attenuated by antioxidant BuOE', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10487739/' }
+                        ]
+                    },
+                    {
+                        icon: '🫀',
+                        title: 'Cardiovascular',
+                        papers: [
+                            { title: 'Proteomic and phosphoproteomic characterization of cardiovascular tissues', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11063234/' },
+                            { title: 'Effects of spaceflight and ground recovery on mesenteric artery', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4050424/' },
+                            { title: 'Spaceflight-induced alterations in cerebral artery vasoconstrictor properties', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3659353/' },
+                            { title: 'Sex-specific cardiovascular adaptations in rats', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11659408/' }
+                        ]
+                    },
+                    {
+                        icon: '🧬',
+                        title: 'Liver, Muscle & Metabolism',
+                        papers: [
+                            { title: 'Multi-omics analysis reveals lipid dysregulation in mouse liver', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6985101/' },
+                            { title: 'Spaceflight Activates Lipotoxic Pathways in Mouse Liver', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6915713/' },
+                            { title: 'Spaceflight Activates Autophagy Programs in Mouse Liver', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5666744/' },
+                            { title: 'Muscle atrophy phenotype gene expression linked to liver-muscle crosstalk', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9576569/' }
+                        ]
+                    },
+                    {
+                        icon: '🌊',
+                        title: 'Other Species',
+                        papers: [
+                            { title: 'Adaptive Changes in Vestibular System of Land Snail', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5672023/' },
+                            { title: 'Morphology of Utricular Otolith Organ in Toadfish', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5899691/' },
+                            { title: 'Influence of altered gravity on Toadfish utricle', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6204554/' },
+                            { title: 'Development of otolith receptors in Japanese quail', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2910419/' }
+                        ]
+                    },
+                    {
+                        icon: '🧪',
+                        title: 'Experimental Models & Methods',
+                        papers: [
+                            { title: 'Mice in Bion-M 1 space mission: training and selection', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4136787/' },
+                            { title: 'Validation of a new Rodent experimental System', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7012842/' },
+                            { title: 'Evaluation of rodent spaceflight in NASA animal enclosure module', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5515519/' },
+                            { title: 'Hindlimb Unloading: Rodent Analog for Microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11747068/' }
+                        ]
+                    }
+                ]
+            },
+            plant: {
+                icon: '🌱',
+                title: 'Plant Biology',
+                subcategories: [
+                    {
+                        icon: '🌿',
+                        title: 'Gravitropism & Root Growth',
+                        papers: [
+                            { title: 'Root skewing-associated genes in Arabidopsis', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7064724/' },
+                            { title: 'Gravitropism and lateral root emergence depend on TNO1', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4642138/' },
+                            { title: 'Root growth movements: Waving and skewing', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5387210/' },
+                            { title: 'Clinorotation triggers root tip curvatures in Arabidopsis', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9861679/' },
+                            { title: 'Gravity signaling in flowering plant roots', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12008199/' }
+                        ]
+                    },
+                    {
+                        icon: '☀️',
+                        title: 'Light Responses',
+                        papers: [
+                            { title: 'Red light enhances plant adaptation to spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9605285/' },
+                            { title: 'Phototropism of Arabidopsis in microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5748516/' },
+                            { title: 'Light and gravity signals synergize in plant development', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4211383/' },
+                            { title: 'RNAseq analysis of Arabidopsis under blue-light in spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6889863/' }
+                        ]
+                    },
+                    {
+                        icon: '🧬',
+                        title: 'Transcriptomics',
+                        papers: [
+                            { title: 'Comparing RNA-Seq and microarray data in Arabidopsis roots', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6240453/' },
+                            { title: 'Spaceflight-induced alternative splicing in Arabidopsis', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6447593/' },
+                            { title: 'Genetic dissection of the Arabidopsis spaceflight transcriptome', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5491145/' },
+                            { title: 'Meta-analysis of Arabidopsis transcriptome in spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10027818/' },
+                            { title: 'Conserved plant transcriptional responses to microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10800490/' }
+                        ]
+                    },
+                    {
+                        icon: '🧪',
+                        title: 'Stress Responses',
+                        papers: [
+                            { title: 'Plants grown in Apollo lunar regolith show stress transcriptomes', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9098553/' },
+                            { title: 'Plant growth strategies remodeled by spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11869762/' },
+                            { title: 'Organ-specific remodeling of Arabidopsis transcriptome', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10058394/' },
+                            { title: 'Spaceflight induces specific alterations in Arabidopsis proteomes', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4290804/' },
+                            { title: 'Unfolded Protein Response in spaceflight-induced reprogramming', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7987364/' }
+                        ]
+                    },
+                    {
+                        icon: '🌍',
+                        title: 'Applied Plant Biology',
+                        papers: [
+                            { title: 'Conducting plant experiments in space and on the Moon', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10764921/' },
+                            { title: 'Growth chambers on ISS for large plants', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10780891/' },
+                            { title: 'Microbiological and nutritional analysis of lettuce crops on ISS', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7067979/' },
+                            { title: 'Evaluating lettuce metatranscriptome with MinION sequencing', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8211661/' },
+                            { title: 'Spatial characterization of microbial communities on leafy greens in ISS Veggie', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8537831/' }
+                        ]
+                    }
+                ]
+            },
+            microbe: {
+                icon: '🦠',
+                title: 'Microbes & Microbiomes',
+                subcategories: [
+                    {
+                        icon: '🧫',
+                        title: 'ISS Microbiome',
+                        papers: [
+                            { title: 'Machine learning algorithm to characterize antimicrobial resistance on ISS', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9400218/' },
+                            { title: 'Microbial tracking-2: metagenomics analysis of ISS bacteria and fungi', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9241228/' },
+                            { title: 'Succession and persistence of microbial communities on ISS surfaces', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6280456/' },
+                            { title: 'Characterization of bacterial and fungal communities on ISS surfaces', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6452512/' },
+                            { title: 'Microbial Characteristics of ISS Environmental Surfaces', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8421509/' }
+                        ]
+                    },
+                    {
+                        icon: '🧬',
+                        title: 'Pathogens & Resistance',
+                        papers: [
+                            { title: 'Spaceflight promotes biofilm formation by Pseudomonas aeruginosa', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Effect of spaceflight on Pseudomonas aeruginosa cell density', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Multi-drug resistant Enterobacter bugandensis on ISS', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Genomic and functional characterization of Enterococcus faecalis from ISS', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' },
+                            { title: 'Altered quorum sensing and physiology of Staphylococcus aureus during spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10774393/' }
+                        ]
+                    },
+                    {
+                        icon: '🍄',
+                        title: 'Fungi & Mycobiome',
+                        papers: [
+                            { title: 'Mycobiome of ISS surfaces', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11063233/' },
+                            { title: 'Characterization of Aspergillus niger isolated from ISS', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5247441/' },
+                            { title: 'Fungal diversity in ISS environments', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11063233/' },
+                            { title: 'Mycobial communities on ISS surfaces', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11063233/' }
+                        ]
+                    },
+                    {
+                        icon: '🧑‍🚀',
+                        title: 'Astronaut Microbiome',
+                        papers: [
+                            { title: 'Longitudinal analysis of astronaut microbiome', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11222149/' },
+                            { title: 'Skin microbiome changes during spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11166909/' },
+                            { title: 'Gut microbiome alterations in spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11222149/' },
+                            { title: 'Oral microbiome changes in astronauts', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11222149/' }
+                        ]
+                    },
+                    {
+                        icon: '🧪',
+                        title: 'Microbial Experiments',
+                        papers: [
+                            { title: 'Microbial growth in space: E. coli and B. subtilis', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Spaceflight effects on microbial antibiotic production', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Microbial adaptation to space conditions', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Microbial responses to microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    }
+                ]
+            },
+            invertebrate: {
+                icon: '🪱',
+                title: 'Invertebrate Models',
+                subcategories: [
+                    {
+                        icon: '🪰',
+                        title: 'Drosophila',
+                        papers: [
+                            { title: 'Drosophila melanogaster as a model for spaceflight effects', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Spaceflight effects on Drosophila immune system', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Drosophila as a model for microgravity research', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Gene expression changes in Drosophila during spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '🪱',
+                        title: 'C. elegans',
+                        papers: [
+                            { title: 'C. elegans as a model for space biology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Spaceflight effects on C. elegans lifespan', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'C. elegans muscle atrophy in microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Gene expression in C. elegans during spaceflight', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '🐛',
+                        title: 'Tardigrades',
+                        papers: [
+                            { title: 'Tardigrade survival in space conditions', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Tardigrade adaptation to microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Tardigrade DNA repair in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Tardigrade cryptobiosis in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '🍞',
+                        title: 'Yeast',
+                        papers: [
+                            { title: 'Yeast as a model for space biology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Spaceflight effects on yeast metabolism', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Yeast gene expression in microgravity', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Yeast DNA damage response in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    }
+                ]
+            },
+            radiation: {
+                icon: '⚡',
+                title: 'Radiation & Omics',
+                subcategories: [
+                    {
+                        icon: '🧬',
+                        title: 'Space Radiation Effects',
+                        papers: [
+                            { title: 'Space radiation effects on DNA damage and repair', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Radiation-induced genomic instability', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Space radiation and cancer risk', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Radiation effects on immune system', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '🔬',
+                        title: 'Multi-Omics Platforms',
+                        papers: [
+                            { title: 'Multi-omics approaches in space biology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Integration of omics data for space research', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Omics technologies for space biology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Space omics and medical atlas', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '🧪',
+                        title: 'DNA Damage & Repair',
+                        papers: [
+                            { title: 'DNA damage response in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Space radiation and DNA repair mechanisms', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Genomic stability in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'DNA damage biomarkers in space', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    },
+                    {
+                        icon: '📊',
+                        title: 'Data Analysis & Integration',
+                        papers: [
+                            { title: 'Data analysis for space omics', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3639165/' },
+                            { title: 'Integration of multi-omics data', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4228280/' },
+                            { title: 'Bioinformatics for space biology', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6251167/' },
+                            { title: 'Machine learning in space omics', url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7829349/' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Create stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3;
+                
+                // Random animation delay
+                const delay = Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Add shooting stars
+            for (let i = 0; i < 5; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 10;
+                const duration = 2 + Math.random() * 2;
+                
+                shootingStar.style.left = `${x}%`;
+                shootingStar.style.top = `${y}%`;
+                shootingStar.style.animationDelay = `${delay}s`;
+                shootingStar.style.animationDuration = `${duration}s`;
+                
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // Open modal with category content
+        function openModal(categoryKey) {
+            const category = categories[categoryKey];
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            let content = `
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <div class="modal-header">
+                    <span class="modal-icon">${category.icon}</span>
+                    <h2 class="modal-title">${category.title}</h2>
+                </div>
+                <div class="subcategories-grid">
+            `;
+            
+            category.subcategories.forEach(subcategory => {
+                content += `
+                    <div class="subcategory-card">
+                        <div class="subcategory-header" onclick="togglePapers(this)">
+                            <span class="subcategory-icon">${subcategory.icon}</span>
+                            <h3 class="subcategory-title">${subcategory.title}</h3>
+                        </div>
+                        <ul class="papers-list">
+                `;
+                
+                subcategory.papers.forEach(paper => {
+                    content += `
+                        <li class="paper-item">
+                            <a href="${paper.url}" target="_blank">${paper.title}</a>
+                        </li>
+                    `;
+                });
+                
+                content += `
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            content += `</div>`;
+            modalContent.innerHTML = content;
+            modal.style.display = 'block';
+            
+            // Close modal when clicking outside content
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Toggle papers visibility
+        function togglePapers(header) {
+            const papersList = header.parentElement.querySelector('.papers-list');
+            papersList.style.display = papersList.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchBox = document.getElementById('searchBox');
+            
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                // Search in categories
+                document.querySelectorAll('.category-card').forEach(card => {
+                    const title = card.querySelector('.category-title').textContent.toLowerCase();
+                    const desc = card.querySelector('.category-desc').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Create the pie chart
+        function createPieChart() {
+            const ctx = document.getElementById('publicationPieChart').getContext('2d');
+            
+            // Data for the pie chart
+            const data = {
+                labels: [
+                    'Human Health & Omics',
+                    'Animal Models',
+                    'Plant Biology',
+                    'Microbes & Microbiomes',
+                    'Invertebrate Models',
+                    'Radiation & Omics',
+                    'Other/General Topics'
+                ],
+                datasets: [{
+                    data: [25, 20, 18, 15, 10, 7, 5],
+                    backgroundColor: [
+                        '#00ffff',
+                        '#00ff88',
+                        '#ff00ff',
+                        '#ffff00',
+                        '#ff8800',
+                        '#ff0088',
+                        '#888888'
+                    ],
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    hoverOffset: 15
+                }]
+            };
+            
+            // Chart configuration
+            const config = {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 14,
+                                    family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    return `${label}: ${value}%`;
+                                }
+                            },
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#00ffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#00ffff',
+                            borderWidth: 1
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            };
+            
+            // Create the chart
+            new Chart(ctx, config);
+        }
+
+        // Initialize everything when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            setupSearch();
+            createPieChart();
+            
+            // Set initial display for papers lists to none
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('subcategory-header')) {
+                    const papersList = event.target.parentElement.querySelector('.papers-list');
+                    if (papersList.style.display === 'block') {
+                        papersList.style.display = 'none';
+                    } else {
+                        papersList.style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
