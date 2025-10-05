@@ -125,7 +125,7 @@
         /* Main Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             margin-bottom: 60px;
         }
@@ -300,8 +300,6 @@
             text-shadow: 0 0 10px #00d9ff;
         }
 
-
-
         @media (max-width: 768px) {
             .logo {
                 font-size: 1.8rem;
@@ -315,8 +313,8 @@
                 flex-direction: column;
             }
 
-            .tools-panel {
-                display: none;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -342,15 +340,21 @@
                 </a>
 
                 <a href="sub2.html" class="stat-card">
-                    <div class="stat-number">30</div>
-                    <div class="stat-label">Topics</div>
-                    <div class="stat-icon">💡</div>
+                    <div class="stat-number">OSDR</div>
+                    <div class="stat-label">Open Science Data Repository</div>
+                    <div class="stat-icon">🗄️</div>
                 </a>
 
                 <a href="sub3.html" class="stat-card">
-                    <div class="stat-number">Latest</div>
-                    <div class="stat-label">Sept 2025</div>
-                    <div class="stat-icon">🚀</div>
+                    <div class="stat-number">NSLSL</div>
+                    <div class="stat-label">Space Life Sciences Library</div>
+                    <div class="stat-icon">📚</div>
+                </a>
+
+                <a href="sub4.html" class="stat-card">
+                    <div class="stat-number">Registry</div>
+                    <div class="stat-label">Research Registry</div>
+                    <div class="stat-icon">📋</div>
                 </a>
             </div>
 
@@ -364,8 +368,8 @@
             <h2 class="section-title">Browse by Category</h2>
             <div class="categories">
                 <a href="human-health.html" class="category-btn">Human Health</a>
-                <a href="paint.html" class="category-btn">Paint</a>
-                <a href="microbes.html" class="category-btn">Mic-obes</a>
+                <a href="paint.html" class="category-btn">Plants</a>
+                <a href="microbes.html" class="category-btn">Microbes</a>
                 <a href="animal.html" class="category-btn">Animal</a>
             </div>
         </main>

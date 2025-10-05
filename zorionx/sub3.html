@@ -73,14 +73,14 @@
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(15px);
             border-radius: 25px;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             border: 2px solid rgba(0, 255, 255, 0.3);
             box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
-            font-size: 4em;
-            margin-bottom: 20px;
+            font-size: 3.5em;
+            margin-bottom: 15px;
             background: linear-gradient(45deg, #00ffff, #00ff88, #00ffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -95,47 +95,17 @@
         }
 
         .subtitle {
-            font-size: 1.5em;
+            font-size: 1.3em;
             color: #00ffaa;
             margin-top: 15px;
             text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
         }
 
-        .search-container {
-            margin-top: 35px;
-            text-align: center;
-        }
-
-        .search-box {
-            width: 100%;
-            max-width: 700px;
-            padding: 18px 30px;
-            font-size: 1.15em;
-            border: 2px solid rgba(0, 255, 255, 0.3);
-            border-radius: 50px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #00ffff;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1);
-            background: rgba(0, 20, 20, 0.8);
-        }
-
-        .search-box::placeholder {
-            color: rgba(0, 255, 255, 0.5);
-        }
-
-    .categories-grid {
-            display: inline;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
-
         }
 
         .category-card {
@@ -149,7 +119,6 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-            width: 500px;
         }
 
         .category-card::before {
@@ -223,6 +192,152 @@
             line-height: 1.6;
         }
 
+        .search-container {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 700px;
+            padding: 18px 30px;
+            font-size: 1.15em;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 20, 20, 0.8);
+        }
+
+        .search-box::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+
+        /* Slideshow Styles */
+        .slideshow-section {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .slideshow-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .slideshow-header h2 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        .slide-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            color: #00ffff;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+            transform: scale(1.1);
+        }
+
+        .slide-indicators {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            background: rgba(0, 255, 255, 0.3);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transform: scale(1.3);
+        }
+
+        .indicator:hover {
+            background: rgba(0, 255, 255, 0.6);
+            transform: scale(1.2);
+        }
 
         footer {
             text-align: center;
@@ -249,6 +364,14 @@
             .category-title {
                 font-size: 2.5em;
             }
+
+            .slideshow-container {
+                height: 500px;
+            }
+
+            .slideshow-header h2 {
+                font-size: 2em;
+            }
         }
 
         @media (max-width: 768px) {
@@ -260,9 +383,8 @@
                 font-size: 1.2em;
             }
 
-            .category-container {
-                padding: 0 20px;
-                min-height: 400px;
+            .categories-grid {
+                grid-template-columns: 1fr;
             }
 
             .category-card {
@@ -281,13 +403,18 @@
                 font-size: 1.2em;
             }
 
-            .category-stats {
-                gap: 15px;
+            .slideshow-container {
+                height: 400px;
             }
 
-            .stat-item {
-                min-width: 120px;
-                padding: 15px 20px;
+            .slideshow-header h2 {
+                font-size: 1.8em;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
             }
         }
     </style>
@@ -304,32 +431,68 @@
             </div>
         </header>
 
-        <div class="container">
         <div class="categories-grid" id="categoriesGrid">
-            <div class="category-card" onclick="navigateToResearch()">
-                <span class="category-icon">🧑‍🚀</span>
+            <div class="category-card" onclick="navigateToResearch('meta-analysis')">
+                <span class="category-icon">📊</span>
                 <h2 class="category-title">Arabidopsis Spaceflight Meta-Analysis</h2>
                 <p class="category-desc">Transcriptomic insights from 15 NASA GeneLab experiments</p>
-                <span class="box-in"> </span>
             </div>
-        </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="categories-grid" id="categoriesGrid">
-            <div class="category-card" onclick="navigateToResearch()">
-                <span class="category-icon">🧑‍🚀</span>
+
+            <div class="category-card" onclick="navigateToResearch('reference-atlas')">
+                <span class="category-icon">🗺️</span>
                 <h2 class="category-title">Arabidopsis Spaceflight Reference Atlas</h2>
                 <p class="category-desc">Meta-analysis of 61 studies on plant transcriptome responses to spaceflight</p>
-                <span class="box-in"> </span>
+            </div>
+            
+            <div class="category-card" onclick="navigateToResearch('lettuce-dashboard')">
+                <span class="category-icon">🌿</span>
+                <h2 class="category-title">ISS Lettuce Study Dashboard</h2>
+                <p class="category-desc">Real-time monitoring and analysis of lettuce growth on the International Space Station</p>
             </div>
         </div>
+    </div>
+
+    <!-- Slideshow Section -->
+    <div class="slideshow-section">
+        <div class="slideshow-header">
+            <h2>Featured Research Studies</h2>
+        </div>
+        
+        <div class="slideshow-container">
+            <div class="slide active">
+                <iframe src="wc7.html" loading="eager" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+            <div class="slide">
+                <iframe src="wc8.html" loading="eager" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+            <div class="slide">
+                <iframe src="wc9.html" loading="eager" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+            <div class="slide">
+                <iframe src="wc10.html" loading="eager" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+            <div class="slide">
+                <iframe src="wc11.html" loading="eager" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+            </div>
+
+            <div class="slide-indicators">
+                <div class="indicator active" onclick="goToSlide(0)"></div>
+                <div class="indicator" onclick="goToSlide(1)"></div>
+                <div class="indicator" onclick="goToSlide(2)"></div>
+                <div class="indicator" onclick="goToSlide(3)"></div>
+                <div class="indicator" onclick="goToSlide(4)"></div>
+            </div>
+
+            <div class="slide-controls">
+                <button class="control-btn" onclick="changeSlide(-1)">‹</button>
+                <button class="control-btn" onclick="changeSlide(1)">›</button>
+            </div>
         </div>
     </div>
-        <footer>
-            <p>Advancing Plant Science for Space Exploration | NASA Life Sciences Data Repository</p>
-        </footer>
-    </div>
+
+    <footer>
+        <p>Advancing Plant Science for Space Exploration | NASA Life Sciences Data Repository</p>
+    </footer>
 
     <script>
         // Create stars background
@@ -380,31 +543,75 @@
             
             searchBox.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
-                const card = document.querySelector('.category-card');
-                const title = card.querySelector('.category-title').textContent.toLowerCase();
-                const desc = card.querySelector('.category-desc').textContent.toLowerCase();
+                const cards = document.querySelectorAll('.category-card');
                 
-                if (title.includes(searchTerm) || desc.includes(searchTerm)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                cards.forEach(card => {
+                    const title = card.querySelector('.category-title').textContent.toLowerCase();
+                    const desc = card.querySelector('.category-desc').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         }
 
         // Navigation function
-        function navigateToResearch() {
-            // Replace with your desired URL
-           
-            window.location = "sub3code1.html";
+        function navigateToResearch(type) {
+            if (type === 'meta-analysis') {
+                window.location.href = "sub3code1.html";
+            } else if (type === 'reference-atlas') {
+                window.location.href = "sub3code2.html";
+            } else if (type === 'lettuce-dashboard') {
+                window.location.href = "sub3code3.html";
+            }
+        }
 
-            // window.location.href = 'arabidopsis-details.html';
+        // Slideshow functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.indicator');
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+            });
+            
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+            resetInterval();
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            resetInterval();
+        }
+
+        function autoSlide() {
+            slideInterval = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            autoSlide();
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
             setupSearch();
+            autoSlide();
         });
     </script>
 </body>

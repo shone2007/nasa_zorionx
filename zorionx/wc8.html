@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solar System Exploration Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom CSS to set the GIF background using the provided link */
+    .solar-card-bg {
+      background-image: url('https://assets.science.nasa.gov/content/dam/science/astro/programs/physics-of-the-cosmos/images/gwsig/gravitational_waves-16.gif?w=1184&h=666&fit=clip&crop=faces%2Cfocalpoint');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+
+  <a 
+    href="https://science.nasa.gov/solar-system/stories/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="max-w-xl w-full block group"
+  >
+    <div class="relative h-72 rounded-xl overflow-hidden shadow-2xl 
+                transition-all duration-500 transform 
+                group-hover:shadow-sky-400/70 group-hover:scale-[1.02] 
+                cursor-pointer">
+      
+      <div class="absolute inset-0 solar-card-bg"></div>
+
+      <div class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 
+                  transition-all duration-500 group-hover:bg-opacity-50">
+        
+        <h1 class="text-white text-2xl md:text-3xl font-extrabold text-center 
+                   tracking-wide leading-tight px-4 text-shadow-lg">
+          Solar System Exploration Stories
+        </h1>
+      </div>
+    </div>
+  </a>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISS Science Highlights Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom CSS to handle text shadow for better readability */
+    .text-shadow-lg {
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    }
+    /* Custom CSS to set the background image using the provided link */
+    .iss-highlights-bg {
+      background-image: url('https://www.nasa.gov/wp-content/uploads/2022/12/02_iss068e003500.jpg?resize=900,600');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+
+  <a 
+    href="https://www.nasa.gov/missions/station/iss-research/space-station-science-highlights-week-of-december-12-2022/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="max-w-xl w-full block group"
+  >
+    <div class="relative h-72 rounded-xl overflow-hidden shadow-2xl 
+                transition-all duration-500 transform 
+                group-hover:shadow-blue-500/70 group-hover:scale-[1.02] 
+                cursor-pointer">
+      
+      <div class="absolute inset-0 iss-highlights-bg"></div>
+
+      <div class="absolute inset-0 bg-black bg-opacity-60 flex items-end p-4 
+                  transition-all duration-500 group-hover:bg-opacity-40">
+        
+        <h1 class="text-white text-xl md:text-2xl font-extrabold text-left 
+                   tracking-wide leading-snug text-shadow-lg">
+          Space Station Science Highlights: Week of December 12, 2022
+        </h1>
+      </div>
+    </div>
+  </a>
+
+</body>
+</html>
